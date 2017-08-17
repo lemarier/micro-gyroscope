@@ -1,4 +1,4 @@
-# github-repos
+# gyroscope
 
 Microservice to cache and expose my Gyroscope data.
 

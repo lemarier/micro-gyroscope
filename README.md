@@ -20,7 +20,7 @@ yarn dev
 
 ### GET /
 
-**200**: Returns a list of projects as follows
+**200**: Returns a list of  gyrosco.pe data as follows
 
 ```json
 [

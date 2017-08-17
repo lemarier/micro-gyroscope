@@ -1,0 +1,22 @@
+{
+  "name": "micro-gyroscope",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "micro",
+    "dev": "micro-dev",
+    "deploy": "now && now alias"
+  },
+  "now": {
+    "alias": "gyroscope.lemarier.sh",
+    "dotenv": true
+  },
+  "dependencies": {
+    "micro": "8.0.1",
+    "mongoose": "^4.11.7",
+    "ms": "2.0.0"
+  },
+  "devDependencies": {
+    "micro-dev": "1.0.2"
+  }
+}

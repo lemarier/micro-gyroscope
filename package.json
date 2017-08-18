@@ -4,23 +4,26 @@
   "version": "1.0.0",
   "scripts": {
     "start": "micro",
+    "lint": "standard",
+    "test": "ava && standard",
     "dev": "micro-dev",
-    "deploy": "now && now alias"
+    "deploy": "now --public  --env NODE_ENV=production && now alias"
   },
   "now": {
-    "alias": "gyroscope.lemarier.sh",
-    "dotenv": true
+    "alias": "gyroscope.lemarier.sh"
   },
   "dependencies": {
     "micro": "8.0.1",
-    "mongoose": "^4.11.7",
-    "ms": "2.0.0"
+    "ms": "2.0.0",
+    "numeral": "^2.0.6",
+    "scrape-it": "^3.3.2"
   },
   "devDependencies": {
-    "micro-dev": "1.0.2",
-    "eslint": "^4.4.1",
-    "eslint-config-prettier": "^2.3.0",
-    "eslint-plugin-prettier": "^2.1.2",
-    "prettier": "^1.5.3"
+    "ava": "^0.22.0",
+    "micro-dev": "^1.2.1",
+    "node-fetch": "^1.7.2",
+    "prettier": "*",
+    "standard": "*",
+    "test-listen": "^1.0.2"
   }
 }

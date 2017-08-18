@@ -1,70 +1,38 @@
-const ms = require("ms");
-const mongoose = require("mongoose");
-const Gyroscope = require("./models/gyroscope");
-const crypto = require("crypto");
+const ms = require('ms')
+const cache = require('./lib/cache')
+const server = require('./lib/server')
 
-let data = [];
+const { username } = require('./config')
 
-module.exports = async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
-  return data;
-};
-
-// Cache data now and every X ms
-cacheData();
-setInterval(cacheData, ms("15m"));
-
-function cacheData() {
-  const start = Date.now();
-
-  // config from env vars
-  const config = {
-    DATABASE_URL: process.env.DATABASE_URL,
-    KEY: crypto
-      .createHash("md5")
-      .update(process.env.GYROSCOPE_USERNAME)
-      .digest("hex")
-  };
-
-  // initialize the connection to DB
-  mongoose.connect(config.DATABASE_URL, {
-    useMongoClient: true
-  });
-
-  const db = mongoose.connection;
-  Gyroscope.findOne({ key: config.KEY }, function(err, data_) {
-    // now agregate the whole database to get total steps
-    Gyroscope.aggregate(
-      [
-        {
-          $unwind: "$extractedData"
-        },
-        {
-          $group: {
-            _id: "total",
-            total: {
-              $sum: "$extractedData.steps.total"
-            }
-          }
-        }
-      ],
-      function(err, total_) {
-        if (err) {
-          log(err);
-          db.close();
-        } else {
-          // Cache our data
-          data = {
-            steps: total_[0].total,
-            weight: data_.weight,
-            weightUnits: data_.weightUnits,
-            heartRate: data_.heartRate,
-            heartRateUnits: data_.heartRateUnits
-          };
-          db.close();
-        }
-      }
-    );
-  });
+// bind log function to be reused later
+const log = data => {
+  console.log(data)
 }
+
+// update cache function
+const updateCache = async () => {
+  // save timestamp to calc the elapsed time
+  const start = Date.now()
+
+  // extract data
+  const value = await cache(username)
+
+  // update API cache value on the server
+  server.save(value)
+
+  // log it
+  log(
+    `Re-built gyroscope cache. ` +
+      `Total: ${value.steps} steps. ` +
+      `Elapsed: ${new Date() - start}ms`
+  )
+}
+
+// cache now
+updateCache()
+
+// update every 15 mins
+setInterval(updateCache, ms('15m'))
+
+// Micro API server
+module.exports = server.handler

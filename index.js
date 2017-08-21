@@ -1,38 +1,37 @@
 const ms = require('ms')
-const cache = require('./lib/cache')
-const server = require('./lib/server')
+const { providers, server } = require('./lib')
 
-const { username } = require('./config')
-
-// bind log function to be reused later
+/**
+ * Logs data to slack and console
+ * @param  {String} data
+ */
 const log = data => {
   console.log(data)
 }
 
-// update cache function
+/**
+ * Update database cache from providers
+ * @return {Promise}
+ */
 const updateCache = async () => {
   // save timestamp to calc the elapsed time
   const start = Date.now()
 
-  // extract data
-  const value = await cache(username)
+  // extract data from providers
+  const value = await providers()
 
   // update API cache value on the server
   server.save(value)
 
   // log it
-  log(
-    `Re-built gyroscope cache. ` +
-      `Total: ${value.steps} steps. ` +
-      `Elapsed: ${new Date() - start}ms`
-  )
+  log(`Re-built cache. Elapsed: ${new Date() - start}ms`)
 }
 
-// cache now
+// update cache
 updateCache()
 
-// update every 15 mins
+// set timer to update every 15 minutes
 setInterval(updateCache, ms('15m'))
 
-// Micro API server
+// Expose the server handler for micro
 module.exports = server.handler

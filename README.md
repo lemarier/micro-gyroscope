@@ -1,6 +1,6 @@
 # gyroscope
 
-Microservice to cache and expose my Gyroscope data.
+Microservice to cache and expose my HealthKit data from [gyrosco.pe](https://gyrosco.pe)
 
 ## Usage
 
@@ -25,11 +25,12 @@ yarn dev
 ```json
 [
   {
-    "steps":992000,
-    "weight":"72.0",
-    "weightUnits":"kg",
-    "heartRate":"77",
-    "heartRateUnits":"bpm"
+    "steps": 1000000,
+    "kms": 762,
+    "weight": 72,
+    "weightUnits": "kg",
+    "heartRate": 65,
+    "heartRateUnits": "bpm"
   }
 ]
 ```

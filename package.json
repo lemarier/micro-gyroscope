@@ -15,13 +15,13 @@
   "dependencies": {
     "micro": "8.0.1",
     "ms": "2.0.0",
+    "node-fetch": "^1.7.2",
     "numeral": "^2.0.6",
     "scrape-it": "^3.3.2"
   },
   "devDependencies": {
     "ava": "^0.22.0",
     "micro-dev": "^1.2.1",
-    "node-fetch": "^1.7.2",
     "prettier": "*",
     "standard": "*",
     "test-listen": "^1.0.2"
